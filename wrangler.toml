@@ -1,0 +1,14 @@
+name = "sidvishnoi-test"
+account_id = "dbee11ce53d02b7ef43eb9deb629e72f"
+compatibility_date = "2026-04-23"
+
+preview_urls = false
+workers_dev = false
+
+[build]
+command = "python build.py"
+
+[assets]
+directory = "."
+not_found_handling = "404-page"
+html_handling = "auto-trailing-slash"
