@@ -88,8 +88,8 @@ if __name__ == "__main__":
 					<meta name="color-scheme" content="light dark" />
 					<title>test.sidvishnoi.com - all tests</title>
 					<style>
-							body {{ line-height: 1.5; }}
-							ul {{ list-style: none; margin: 0; padding-left: 0.5em; border-left: 1px solid light-dark(#111, #eee); }}
+							body {{ line-height: 1.5; font-family: Bahnschrift, 'DIN Alternate', 'Franklin Gothic Medium', 'Nimbus Sans Narrow', sans-serif-condensed, sans-serif; }}
+							ul {{ list-style: none; margin: 0; padding-left: 1em; border-left: 1px dotted light-dark(#111, #eee); }}
 					</style>
 			</head>
 			<body>
