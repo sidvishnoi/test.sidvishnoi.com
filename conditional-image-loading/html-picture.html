@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="color-scheme" content="light dark" />
+
+		<title>Conditional image loading: HTML picture element</title>
+
+		<style>
+			/* This CSS is for presentation only, not part of actual demo. */
+			body {
+				line-height: 1.5;
+				font-family:
+					Bahnschrift, "DIN Alternate", "Franklin Gothic Medium", "Nimbus Sans Narrow", sans-serif-condensed, sans-serif;
+			}
+			code {
+				font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+			}
+
+			.status {
+				margin-bottom: 1rem;
+			}
+			.status p {
+				font-weight: bold;
+				margin: 0;
+			}
+			output {
+				background-color: light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1));
+				padding: 0.2em 0.5em;
+				display: inline-block;
+			}
+			.status .status-mobile {
+				display: none;
+				color: #d9534f;
+			}
+			.status .status-desktop {
+				display: block;
+				color: #5cb85c;
+			}
+			@media (max-width: 480px) {
+				.status .status-desktop {
+					display: none;
+				}
+				.status .status-mobile {
+					display: block;
+				}
+			}
+		</style>
+		<script>
+			new PerformanceObserver((list) => {
+				list.getEntries().forEach((entry) => {
+					if (entry.name.includes("placeholder.png")) {
+						setTimeout(() => {
+							document.querySelector("output").textContent = "Image loaded";
+						});
+					}
+				});
+			}).observe({ type: "resource", buffered: true });
+		</script>
+		<!--<script>
+			// A parser blocking* script; you'll notice the image starting to load (on
+			// desktop) even before script finishes.
+			for (let i = 0; i < 4_000_000; i++) {
+				document.writeln('hey:' + i);
+			}
+			// *not just the parser, this script will block everything in the tab
+		</script>-->
+	</head>
+	<body>
+		<nav>
+			<a href="https://www.htmhell.dev/adventcalendar/2026/21/">&larr; Back to the article</a>
+		</nav>
+		<h1>Conditional image loading: HTML <code>&lt;picture&gt;</code> element</h1>
+		<p>
+			This demo uses a <code>&lt;picture&gt;</code> element, to prevent downloading an image on smaller screens by
+			substituting it with a transparent 1px data URI on smaller screens.
+		</p>
+
+		<h3>How to test:</h3>
+		<ol>
+			<li>Open your browser's Developer Tools and go to the Network tab.</li>
+			<li>
+				On a desktop viewport (width &gt; 480px for this demo), refresh the page. You will see the image load
+				(<code>placeholder.png</code>).
+			</li>
+			<li>
+				Resize the window below 480px (or use mobile emulation) and do a hard refresh. The image network request is
+				skipped.
+			</li>
+		</ol>
+
+		<div class="status">
+			<output>
+				Image not yet loaded.
+				<noscript>JS required for detection.</noscript>
+			</output>
+			<p class="status status-desktop">Viewport > 480px: Image should load.</p>
+			<p class="status status-mobile">Viewport &le; 480px: Image should NOT load.</p>
+		</div>
+
+		<!-- Demo begins -->
+		<style>
+			@media (max-width: 480px) {
+				picture img {
+					display: none;
+				}
+			}
+		</style>
+
+		<picture>
+			<source srcset="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'/%3E" media="(max-width: 480px)" />
+			<img src="./placeholder.png" alt="sample placeholder image" width="600" height="400" />
+		</picture>
+		<!-- Demo ends -->
+	</body>
+</html>

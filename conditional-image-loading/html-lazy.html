@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="color-scheme" content="light dark" />
+
+		<title>Conditional image loading: Lazy loading + CSS hide</title>
+
+		<style>
+			/* This CSS is for presentation only, not part of actual demo. */
+			body {
+				line-height: 1.5;
+				font-family:
+					Bahnschrift, "DIN Alternate", "Franklin Gothic Medium", "Nimbus Sans Narrow", sans-serif-condensed, sans-serif;
+			}
+			code {
+				font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+			}
+
+			.status {
+				margin-bottom: 1rem;
+			}
+			.status p {
+				font-weight: bold;
+				margin: 0;
+			}
+			output {
+				background-color: light-dark(#eee, #333);
+				padding: 0.2em 0.5em;
+				display: inline-block;
+			}
+			.status .status-mobile {
+				display: none;
+				color: #d9534f;
+			}
+			.status .status-desktop {
+				display: block;
+				color: #5cb85c;
+			}
+			@media (max-width: 480px) {
+				.status .status-desktop {
+					display: none;
+				}
+				.status .status-mobile {
+					display: block;
+				}
+			}
+
+			.placeholder {
+				height: 600vh;
+				width: 80vw;
+				max-width: 300px;
+				padding: 0.5rem;
+				margin: 1rem auto;
+				background-color: #eee;
+				--h: 20px;
+				--a: light-dark(rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0.05));
+				--b: light-dark(rgba(0, 0, 0, 0.07), rgba(255, 255, 255, 0.07));
+				background: repeating-linear-gradient(
+					to bottom,
+					var(--a),
+					var(--a) var(--h),
+					var(--b) var(--h),
+					var(--b) calc(var(--h) * 2)
+				);
+			}
+
+			.placeholder > div {
+				position: sticky;
+				top: 1rem;
+			}
+		</style>
+		<script>
+			new PerformanceObserver((list) => {
+				list.getEntries().forEach((entry) => {
+					if (entry.name.includes("placeholder.png")) {
+						setTimeout(() => {
+							document.querySelector("output").textContent = "Image loaded";
+						});
+					}
+				});
+			}).observe({ type: "resource", buffered: true });
+		</script>
+	</head>
+	<body>
+		<nav>
+			<a href="https://www.htmhell.dev/adventcalendar/2026/21/">&larr; Back to the article</a>
+		</nav>
+		<h1>Conditional image loading: Lazy loading + CSS hide</h1>
+		<p>
+			This demo uses <code>loading="lazy"</code> attribute on img, combined with a media query to prevent downloading an
+			image on smaller screens.
+		</p>
+
+		<h3>How to test:</h3>
+		<ol>
+			<li>Open your browser's Developer Tools and go to the Network tab.</li>
+			<li>
+				On a desktop viewport (width &gt; 480px for this demo), refresh the page. You will see the image load
+				(<code>placeholder.png</code>).
+			</li>
+			<li>
+				Resize the window below 480px (or use mobile emulation) and do a hard refresh. The image network request is
+				skipped.
+			</li>
+		</ol>
+
+		<div class="placeholder">
+			<div>
+				<p>
+					This is placeholder to move the image far below the viewport (at least
+					<code>600vh</code>) to prevent eager loading.
+				</p>
+				<output>
+					Image not yet loaded.
+					<noscript>JS required for detection.</noscript>
+				</output>
+			</div>
+		</div>
+
+		<div class="status">
+			<p class="status status-desktop">Viewport > 480px: Image should load.</p>
+			<p class="status status-mobile">Viewport &le; 480px: Image should NOT load.</p>
+		</div>
+
+		<!-- Demo begins -->
+		<style>
+			@media (max-width: 480px) {
+				img {
+					display: none;
+				}
+			}
+		</style>
+		<img src="./placeholder.png" loading="lazy" alt="sample placeholder image" width="600" height="400" />
+		<!-- Demo ends -->
+	</body>
+</html>
