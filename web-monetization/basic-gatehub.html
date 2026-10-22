@@ -13,8 +13,7 @@
 			body {
 				line-height: 1.5;
 				font-family:
-					Bahnschrift, "DIN Alternate", "Franklin Gothic Medium",
-					"Nimbus Sans Narrow", sans-serif-condensed, sans-serif;
+					Bahnschrift, "DIN Alternate", "Franklin Gothic Medium", "Nimbus Sans Narrow", sans-serif-condensed, sans-serif;
 			}
 		</style>
 
@@ -36,16 +35,13 @@
 
 		<p>
 			This page is testing Web Monetization for
-			<a href="https://wallet.gatehub.net">GateHub</a> EUR production wallet
-			address:
-			<a href="https://ilp.gatehub.net/981946513/eur"
-				>https://ilp.gatehub.net/981946513/eur</a
-			>.
+			<a href="https://wallet.gatehub.net">GateHub</a> EUR production wallet address:
+			<a href="https://ilp.gatehub.net/981946513/eur">https://ilp.gatehub.net/981946513/eur</a>.
 		</p>
 
 		<p>
-			Make sure your Web Monetization extension is connected to a production
-			wallet address for this page to receive monetization events. Want to try a
+			Make sure your Web Monetization extension is connected to a production wallet address for this page to receive
+			monetization events. Want to try a
 			<a href="basic.html">testnet wallet test</a> instead?
 		</p>
 
@@ -53,11 +49,7 @@
 
 		<p>
 			Received amount:
-			<output
-				id="amount"
-				style="font-variant-numeric: tabular-nums; font-weight: bold"
-				>€0.00</output
-			>
+			<output id="amount" style="font-variant-numeric: tabular-nums; font-weight: bold">€0.00</output>
 		</p>
 
 		<strong>Monetization Events:</strong>
@@ -67,8 +59,7 @@
 			let totalAmountReceived = 0;
 
 			const ts = () => new Date().toLocaleTimeString();
-			const log = (msg) =>
-				logEl.prepend(document.createTextNode(`${ts()}: ${msg}\n`));
+			const log = (msg) => logEl.prepend(document.createTextNode(`${ts()}: ${msg}\n`));
 
 			const amountEl = document.getElementById("amount");
 			const logEl = document.getElementById("events-log");
@@ -77,11 +68,9 @@
 				log("Web Monetization is not supported");
 			}
 
-			document
-				.querySelector('link[rel="monetization"]')
-				.addEventListener("load", () => {
-					log("Load event fired");
-				});
+			document.querySelector('link[rel="monetization"]').addEventListener("load", () => {
+				log("Load event fired");
+			});
 
 			const fmt = new Intl.NumberFormat(undefined, {
 				style: "currency",
