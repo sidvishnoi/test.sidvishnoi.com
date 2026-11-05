@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="color-scheme" content="light dark" />
+
+		<title>Conditional image loading: Lazy loading + CSS hide with container query</title>
+
+		<style>
+			/* This CSS is for presentation only, not part of actual demo. */
+			body {
+				line-height: 1.5;
+				font-family:
+					Bahnschrift, "DIN Alternate", "Franklin Gothic Medium", "Nimbus Sans Narrow", sans-serif-condensed, sans-serif;
+			}
+			code {
+				font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+			}
+			output {
+				background-color: light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1));
+				padding: 0.2em 0.5em;
+				display: inline-block;
+				margin-bottom: 1rem;
+			}
+
+			.container {
+				width: 200px;
+				min-width: 120px;
+				max-width: 100%;
+				resize: horizontal;
+				overflow: auto;
+				padding: 1rem;
+				border: 2px dashed currentColor;
+			}
+			.container img {
+				max-width: 100%;
+				height: auto;
+			}
+
+			.status-narrow,
+			.status-wide {
+				font-weight: bold;
+				margin: 0 0 1rem;
+			}
+			.status-narrow {
+				color: #d9534f;
+			}
+			.status-wide {
+				display: none;
+				color: #5cb85c;
+			}
+			@container (width > 300px) {
+				.status-narrow {
+					display: none;
+				}
+				.status-wide {
+					display: block;
+				}
+			}
+
+			label {
+				display: flex;
+				align-items: center;
+			}
+		</style>
+		<script>
+			new PerformanceObserver((list) => {
+				list.getEntries().forEach((entry) => {
+					if (entry.name.includes("placeholder.png")) {
+						setTimeout(() => {
+							document.getElementById("status").textContent = "Image loaded";
+						});
+					}
+				});
+			}).observe({ type: "resource", buffered: true });
+		</script>
+	</head>
+	<body>
+		<nav>
+			<a href="https://www.htmhell.dev/adventcalendar/2026/21/">&larr; Back to the article</a>
+		</nav>
+		<h1>Conditional image loading: Lazy loading + CSS hide with container query</h1>
+		<p>
+			This demo uses the <code>loading="lazy"</code> attribute on an <code>&lt;img&gt;</code>, combined with a container
+			query, to prevent downloading the image when its container is narrow.
+		</p>
+
+		<h2>How to test</h2>
+		<ol>
+			<li>Open your browser's Developer Tools and go to the Network tab.</li>
+			<li>
+				Refresh the page. The container below starts at 200px wide, so the image (<code>placeholder.png</code>) is not
+				requested.
+			</li>
+			<li>
+				Make the container wider than 300px, using the slider or by dragging its bottom-right corner. The image is
+				requested and appears.
+			</li>
+		</ol>
+
+		<output id="status">
+			Image not yet loaded.
+			<noscript>JS required for detection.</noscript>
+		</output>
+
+		<div>
+			<label>
+				<span>Container width:</span>
+				<input type="range" id="width" min="120" max="600" value="200" />
+				<output for="width" id="width-value">200px</output>
+			</label>
+		</div>
+
+		<!-- Demo begins -->
+		<style>
+			.container {
+				container-type: inline-size;
+			}
+
+			@container (width <= 300px) {
+				img.wide-only {
+					display: none;
+				}
+			}
+		</style>
+
+		<div class="container">
+			<p class="status-narrow">Container &le; 300px: image should NOT load.</p>
+			<p class="status-wide">Container &gt; 300px: image should load.</p>
+
+			<img
+				src="./placeholder.png"
+				loading="lazy"
+				class="wide-only"
+				alt="sample placeholder image"
+				width="600"
+				height="400"
+			/>
+		</div>
+		<!-- Demo ends -->
+
+		<script>
+			function syncWidthControls() {
+				const container = document.querySelector(".container");
+				const slider = document.getElementById("width");
+				const label = document.getElementById("width-value");
+
+				slider.addEventListener("input", () => {
+					container.style.width = slider.value + "px";
+				});
+
+				new ResizeObserver(([entry]) => {
+					const width = Math.round(entry.contentRect.width);
+					slider.value = width;
+					label.textContent = width + "px";
+				}).observe(container);
+			}
+
+			syncWidthControls();
+		</script>
+	</body>
+</html>
