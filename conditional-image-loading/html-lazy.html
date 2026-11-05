@@ -26,7 +26,7 @@
 				margin: 0;
 			}
 			output {
-				background-color: light-dark(#eee, #333);
+				background-color: light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1));
 				padding: 0.2em 0.5em;
 				display: inline-block;
 			}
@@ -45,30 +45,6 @@
 				.status .status-mobile {
 					display: block;
 				}
-			}
-
-			.placeholder {
-				height: 600vh;
-				width: 80vw;
-				max-width: 300px;
-				padding: 0.5rem;
-				margin: 1rem auto;
-				background-color: #eee;
-				--h: 20px;
-				--a: light-dark(rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0.05));
-				--b: light-dark(rgba(0, 0, 0, 0.07), rgba(255, 255, 255, 0.07));
-				background: repeating-linear-gradient(
-					to bottom,
-					var(--a),
-					var(--a) var(--h),
-					var(--b) var(--h),
-					var(--b) calc(var(--h) * 2)
-				);
-			}
-
-			.placeholder > div {
-				position: sticky;
-				top: 1rem;
 			}
 		</style>
 		<script>
@@ -106,20 +82,11 @@
 			</li>
 		</ol>
 
-		<div class="placeholder">
-			<div>
-				<p>
-					This is placeholder to move the image far below the viewport (at least
-					<code>600vh</code>) to prevent eager loading.
-				</p>
-				<output>
-					Image not yet loaded.
-					<noscript>JS required for detection.</noscript>
-				</output>
-			</div>
-		</div>
-
 		<div class="status">
+			<output>
+				Image not yet loaded.
+				<noscript>JS required for detection.</noscript>
+			</output>
 			<p class="status status-desktop">Viewport > 480px: Image should load.</p>
 			<p class="status status-mobile">Viewport &le; 480px: Image should NOT load.</p>
 		</div>
